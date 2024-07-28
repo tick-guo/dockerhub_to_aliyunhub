@@ -31,7 +31,8 @@ env:
   REGISTRY: registry.cn-chengdu.aliyuncs.com
   NAMESPACE: tickg
   IMAGE: bitwarden-self-host
-  TAG: beta
+  #TAG: beta
+  TAG: dev
 
 permissions:
   contents: read
