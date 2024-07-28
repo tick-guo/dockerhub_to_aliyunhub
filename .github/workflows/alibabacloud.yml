@@ -43,6 +43,13 @@ jobs:
     environment: production
 
     steps:
+
+    - name: show env
+      run: |
+        pwd
+        uname -a
+        whoami
+        
     
     # 1.1 Login to ACR
     - name: Login to ACR with the AccessKey pair
