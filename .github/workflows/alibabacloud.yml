@@ -3,7 +3,15 @@ name: Get Bitwarden To Aliyun
 
 on:
   workflow_dispatch:
-  
+    # Inputs the workflow accepts.
+    inputs:
+      tag:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 同步的版本tag
+        # Default value if no value is explicitly provided
+        default: 'beta'
+        # Input has to be provided for the workflow to run
+        required: true  
 
 # Environment variables available to all jobs and steps in this workflow.
 env:
@@ -12,7 +20,7 @@ env:
   NAMESPACE: tickg
   IMAGE: bitwarden-self-host
   #TAG: beta
-  TAG: devx
+  TAG: "${{ github.event.inputs.tag }}"
 
 permissions:
   contents: read
