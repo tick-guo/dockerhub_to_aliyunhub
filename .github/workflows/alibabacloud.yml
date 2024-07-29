@@ -30,7 +30,7 @@ jobs:
 
     - name: show env
       run: |
-        echo pwd=$(pwd)
+        echo curdir=$(pwd)
         echo sysinfo=$(uname -a)
         echo whoami=$(whoami)
         echo USER=$USERNAME
@@ -48,7 +48,7 @@ jobs:
     # 1.2 Build and push image to ACR
     - name: Build and push image to ACR
       run: |
-        docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}  registry.cn-chengdu.aliyuncs.com
+        docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
         docker pull bitwarden/self-host:$TAG
         docker images
         docker tag bitwarden/self-host:$TAG "$REGISTRY/$NAMESPACE/$IMAGE:$TAG"
