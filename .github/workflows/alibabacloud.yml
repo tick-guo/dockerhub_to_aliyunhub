@@ -23,7 +23,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production push_to_aliyun
+    environment: push_to_aliyun
 
     steps:
 
