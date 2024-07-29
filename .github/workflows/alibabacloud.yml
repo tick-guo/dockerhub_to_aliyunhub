@@ -61,7 +61,7 @@ jobs:
         echo 把IMAGE中的斜线/替换为短横线-
         NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
         echo tag不变
-        NEWTAG=$ORGTAG
+        NEWTAG=$TAG
 
         echo NEWIMAGE=$NEWIMAGE
         echo NEWTAG=$NEWTAG
