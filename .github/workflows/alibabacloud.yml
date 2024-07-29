@@ -2,8 +2,6 @@
 name: Get Bitwarden To Aliyun
 
 on:
-  #push:
-  #  branches: [ "main" ]
   workflow_dispatch:
   
 
@@ -15,7 +13,6 @@ env:
   IMAGE: bitwarden-self-host
   #TAG: beta
   TAG: devx
-
 
 permissions:
   contents: read
@@ -46,7 +43,7 @@ jobs:
 
     # 2 Scan image in ACR
     - name: Scan image in ACR
-      uses: aliyun/acr-scan@v1
+      uses: aliyun/acr-scan@v1.0.4
       with:
         region-id: "${{ env.REGION_ID }}"
         access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
