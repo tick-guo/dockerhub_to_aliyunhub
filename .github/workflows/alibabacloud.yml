@@ -48,24 +48,14 @@ jobs:
         #login-server: "${{ env.REGISTRY }}"
         #username: "${{ secrets.USERNAME }}"
         #password: "${{ secrets.PASSWORD }}"
-
-    # 2 Scan image in ACR
-    - name: Scan image in ACR
-      uses: aliyun/acr-scan@v1.0.4
-      with:
-        region-id: "${{ env.REGION_ID }}"
-        access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
-        access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
-        repository: "${{ env.NAMESPACE }}/${{ env.IMAGE }}"
-        tag: "${{ env.TAG }}"
         
-    # 3 Build and push image to ACR
+    # 2 Build and push image to ACR
     - name: Build and push image to ACR
       env: 
         ACR_USER: ${{ secrets.USERNAME }}
         ACR_PASS: ${{ secrets.PASSWORD }} 
       run: |
-        exit 0
+        #exit 0
         #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
         docker pull bitwarden/self-host:$TAG
         docker images
