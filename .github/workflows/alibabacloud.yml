@@ -15,6 +15,8 @@ env:
   IMAGE: bitwarden-self-host
   #TAG: beta
   TAG: dev
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
 
 permissions:
   contents: read
@@ -28,11 +30,11 @@ jobs:
 
     - name: show env
       run: |
-        pwd
-        uname -a
-        whoami
-        echo USERNAME=${{ secrets.USERNAME }}
-        echo PASSWORD=${{ secrets.PASSWORD }}
+        echo pwd=$(pwd)
+        echo sysinfo=$(uname -a)
+        echo whoami=$(whoami)
+        echo USER=$USERNAME
+        echo PASS=$PASSWORD
         
     
     # 1.1 Login to ACR
