@@ -33,23 +33,34 @@ jobs:
         echo sysinfo=$(uname -a)
         echo whoami=$(whoami)
         
-    # 1.1 Login to ACR
+    # 1 Login to ACR
     - name: Login to ACR with the AccessKey pair
       uses: aliyun/acr-login@v1.0.6
       with:
-        #region-id: "${{ env.REGION_ID }}"
+        region-id: "${{ env.REGION_ID }}"
         #access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
         #access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
         login-server: "${{ env.REGISTRY }}"
         username: "${{ secrets.USERNAME }}"
         password: "${{ secrets.PASSWORD }}"
+
+    # 2 Scan image in ACR
+    - name: Scan image in ACR
+      uses: aliyun/acr-scan@v1
+      with:
+        region-id: "${{ env.REGION_ID }}"
+        access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+        access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+        repository: "${{ env.NAMESPACE }}/${{ env.IMAGE }}"
+        tag: "${{ env.TAG }}"
         
-    # 1.2 Build and push image to ACR
+    # 3 Build and push image to ACR
     - name: Build and push image to ACR
       env: 
         ACR_USER: ${{ secrets.USERNAME }}
         ACR_PASS: ${{ secrets.PASSWORD }} 
       run: |
+        exit 0
         #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
         docker pull bitwarden/self-host:$TAG
         docker images
