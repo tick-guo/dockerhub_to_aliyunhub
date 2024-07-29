@@ -15,8 +15,7 @@ env:
   IMAGE: bitwarden-self-host
   #TAG: beta
   TAG: dev
-  USERNAME: ${{ secrets.USERNAME }}
-  PASSWORD: ${{ secrets.PASSWORD }}
+
 
 permissions:
   contents: read
@@ -24,7 +23,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: production push_to_aliyun
 
     steps:
 
@@ -47,6 +46,9 @@ jobs:
 
     # 1.2 Build and push image to ACR
     - name: Build and push image to ACR
+      env: 
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }} 
       run: |
         docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
         docker pull bitwarden/self-host:$TAG
