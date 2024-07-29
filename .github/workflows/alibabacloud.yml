@@ -32,10 +32,7 @@ jobs:
         echo curdir=$(pwd)
         echo sysinfo=$(uname -a)
         echo whoami=$(whoami)
-        echo USER=$USERNAME
-        echo PASS=$PASSWORD
         
-    
     # 1.1 Login to ACR
     - name: Login to ACR with the AccessKey pair
       uses: aliyun/acr-login@v1.0.6
@@ -49,8 +46,8 @@ jobs:
     # 1.2 Build and push image to ACR
     - name: Build and push image to ACR
       env: 
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }} 
+        ACR_USER: ${{ secrets.USERNAME }}
+        ACR_PASS: ${{ secrets.PASSWORD }} 
       run: |
         #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
         docker pull bitwarden/self-host:$TAG
