@@ -38,13 +38,13 @@ jobs:
     
     # 1.1 Login to ACR
     - name: Login to ACR with the AccessKey pair
-      uses: aliyun/acr-login@v1
+      uses: aliyun/acr-login@v1.0.6
       with:
         region-id: "${{ env.REGION_ID }}"
         #access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
         #access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
-        access-key-id: "${{ secrets.USERNAME }}"
-        access-key-secret: "${{ secrets.PASSWORD }}"
+        username: "${{ secrets.USERNAME }}"
+        password: "${{ secrets.PASSWORD }}"
         
     # 1.2 Build and push image to ACR
     - name: Build and push image to ACR
