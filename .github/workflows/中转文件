@@ -1,0 +1,81 @@
+
+name: 中转文件 To Aliyun
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      image:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'http下载地址'
+        # Default value if no value is explicitly provided
+        default: 'https://github.com/bitwarden/clients/releases/download/desktop-v2024.7.1/Bitwarden-Portable-2024.7.1.exe'
+        # Input has to be provided for the workflow to run
+        required: true
+      tag:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: '标签一般用文件名'
+        # Default value if no value is explicitly provided
+        default: 'Bitwarden-Portable-2024.7.1.exe'
+        # Input has to be provided for the workflow to run
+        required: true
+
+# Environment variables available to all jobs and steps in this workflow.
+env:
+  REGION_ID: cn-chengdu
+  REGISTRY: registry.cn-chengdu.aliyuncs.com
+  NAMESPACE: tickg
+  IMAGE: "${{ github.event.inputs.image }}"
+  TAG: "${{ github.event.inputs.tag }}"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: push_to_aliyun
+    
+    steps:  
+    
+    # 1 Login to ACR
+    - name: Login to ACR with the AccessKey pair
+      uses: aliyun/acr-login@v1.0.6
+      with:
+        region-id: "${{ env.REGION_ID }}"
+        access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+        access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+        #login-server: "${{ env.REGISTRY }}"
+        #username: "${{ secrets.USERNAME }}"
+        #password: "${{ secrets.PASSWORD }}"
+        
+    # 2 Build and push image to ACR
+    - name: Build and push image to ACR
+      run: |
+        echo curdir=$(pwd)
+        echo sysinfo=$(uname -a)
+        echo whoami=$(whoami)
+        echo IMAGE=${{ env.IMAGE }}
+        echo TAG=${{ env.TAG }}
+
+        mkdir work;cd work
+        
+        
+        echo 把IMAGE中的斜线/替换为短横线-
+        NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
+        echo tag不变
+        NEWTAG=$TAG
+
+        echo NEWIMAGE=$NEWIMAGE
+        echo NEWTAG=$NEWTAG
+        
+        #exit 0
+        #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
+        
+        docker pull $IMAGE:$TAG
+        docker images
+        docker tag $IMAGE:$TAG "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+        docker images
+        docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+        echo 同步完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+        
