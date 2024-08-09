@@ -1,5 +1,5 @@
 
-name: Get Bitwarden Latest To Aliyun
+name: Get Bitwarden(分镜像) To Aliyun
 
 on:
   workflow_dispatch:
