@@ -59,23 +59,13 @@ jobs:
         echo TAG=${{ env.TAG }}
 
         mkdir work;cd work
+        echo "FROM busybox:latest" > Dockerfile
+        echo "RUN mkdir /app" >> Dockerfile
+        echo "RUN cd /app && wget $IMAGE " >> Dockerfile
+        #
+        docker build -t $REGISTRY/$NAMESPACE/busybox:$TAG .
+        docker push $REGISTRY/$NAMESPACE/busybox:$TAG
         
         
-        echo 把IMAGE中的斜线/替换为短横线-
-        NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
-        echo tag不变
-        NEWTAG=$TAG
-
-        echo NEWIMAGE=$NEWIMAGE
-        echo NEWTAG=$NEWTAG
-        
-        #exit 0
-        #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
-        
-        docker pull $IMAGE:$TAG
-        docker images
-        docker tag $IMAGE:$TAG "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
-        docker images
-        docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
-        echo 同步完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+      
         
