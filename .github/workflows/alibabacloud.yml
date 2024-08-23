@@ -61,6 +61,8 @@ jobs:
         echo whoami=$(whoami)
         echo IMAGE=${{ env.IMAGE }}
         echo TAG=${{ env.TAG }}
+
+        docker version
         
         echo 把IMAGE中的斜线/替换为短横线-
         NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
