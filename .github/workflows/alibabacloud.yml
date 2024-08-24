@@ -45,10 +45,10 @@ jobs:
     environment: push_to_aliyun
     
     steps:  
-    - name: 如果是计划触发，则设置环境变量
+    - name: 如果没有输入参数，则设置默认值
       run: |
         echo 触发事件:$GITHUB_EVENT_NAME
-        if [ "$$GITHUB_EVENT_NAME" == "schedule" ];then
+        if [ "${{ env.IMAGE }}" == "" ];then
           echo set env
           echo "IMAGE=bitwarden/self-host" >> $GITHUB_ENV
           echo "TAG=beta" >> $GITHUB_ENV
