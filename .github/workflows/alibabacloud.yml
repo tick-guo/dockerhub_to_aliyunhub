@@ -55,10 +55,7 @@ jobs:
         else
           echo 已经有变量，不设置
         fi
-        echo 打印变量
-        echo IMAGE=${{ env.IMAGE }}
-        echo TAG=${{ env.TAG }}
-    
+   
     # 1 Login to ACR
     - name: Login to ACR with the AccessKey pair
       uses: aliyun/acr-login@v1.0.6
@@ -72,7 +69,7 @@ jobs:
         
         
     # 2 Build and push image to ACR
-    - name: Build and push image to ACR
+    - name: 拉取docker镜像并推送到阿里云
       run: |
         echo curdir=$(pwd)
         echo sysinfo=$(uname -a)
