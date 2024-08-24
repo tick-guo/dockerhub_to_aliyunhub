@@ -49,10 +49,15 @@ jobs:
       run: |
         echo 触发事件:$GITHUB_EVENT_NAME
         if [ "${{ env.IMAGE }}" == "" ];then
-          echo set env
+          echo 设置变量
           echo "IMAGE=bitwarden/self-host" >> $GITHUB_ENV
           echo "TAG=beta" >> $GITHUB_ENV
+        else
+          echo 已经有变量，不设置
         fi
+        echo 打印变量
+        echo IMAGE=${{ env.IMAGE }}
+        echo TAG=${{ env.TAG }}
     
     # 1 Login to ACR
     - name: Login to ACR with the AccessKey pair
