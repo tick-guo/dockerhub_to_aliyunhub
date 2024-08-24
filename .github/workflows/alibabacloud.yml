@@ -5,6 +5,8 @@ on:
   schedule:
   # 每天22:05运行,中国时区每天06:05运行
   - cron: '5 22 */1 * *'
+
+  
   
   workflow_dispatch:
     # Inputs the workflow accepts.
@@ -41,6 +43,13 @@ jobs:
     environment: push_to_aliyun
     
     steps:  
+    - name: 如果是计划触发，则设置环境变量
+      if: github.event.name == 'schedule'
+      run: |
+        echo set env
+        echo "IMAGE=bitwarden/self-host" >> $GITHUB_ENV
+        echo "TAG=beta" >> $GITHUB_ENV
+    
     
     # 1 Login to ACR
     - name: Login to ACR with the AccessKey pair
