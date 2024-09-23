@@ -1,0 +1,99 @@
+
+name: Get vaultwarden_rs(单镜像) To Aliyun
+
+on:
+  schedule:
+  # 每天22:05运行,中国时区每天06:05运行
+  - cron: '5 22 */1 * *'
+
+  push:
+    branches:
+    - main
+  
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      image:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'dockerhub上的image名字,不仅可以同步bitwarden，其他也可以'
+        # Default value if no value is explicitly provided
+        default: 'vaultwarden/server'
+        # Input has to be provided for the workflow to run
+        required: true
+      tag:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'dockerhub上的tag, 将同步到阿里云'
+        # Default value if no value is explicitly provided
+        default: 'latest'
+        # Input has to be provided for the workflow to run
+        required: true
+
+# Environment variables available to all jobs and steps in this workflow.
+env:
+  REGION_ID: cn-chengdu
+  REGISTRY: registry.cn-chengdu.aliyuncs.com
+  NAMESPACE: tickg
+  IMAGE: "${{ github.event.inputs.image }}"
+  TAG: "${{ github.event.inputs.tag }}"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: push_to_aliyun
+    
+    steps:  
+    - name: 如果没有输入参数，则设置默认值
+      run: |
+        echo 触发事件:$GITHUB_EVENT_NAME
+        if [ "${{ env.IMAGE }}" == "" ];then
+          echo 设置变量
+          echo "IMAGE=bitwarden/self-host" >> $GITHUB_ENV
+          echo "TAG=beta" >> $GITHUB_ENV
+        else
+          echo 已经有变量，不设置
+        fi
+   
+    # 1 Login to ACR
+    - name: Login to ACR with the AccessKey pair
+      uses: aliyun/acr-login@v1.0.6
+      with:
+        region-id: "${{ env.REGION_ID }}"
+        access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+        access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+        #login-server: "${{ env.REGISTRY }}"
+        #username: "${{ secrets.USERNAME }}"
+        #password: "${{ secrets.PASSWORD }}"
+        
+        
+    # 2 Build and push image to ACR
+    - name: 拉取docker镜像并推送到阿里云
+      run: |
+        echo curdir=$(pwd)
+        echo sysinfo=$(uname -a)
+        echo whoami=$(whoami)
+        echo IMAGE=${{ env.IMAGE }}
+        echo TAG=${{ env.TAG }}
+
+        docker version
+        
+        echo 把IMAGE中的斜线/替换为短横线-
+        NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
+        echo tag不变
+        NEWTAG=$TAG
+
+        echo NEWIMAGE=$NEWIMAGE
+        echo NEWTAG=$NEWTAG
+        
+        #exit 0
+        #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
+        
+        docker pull $IMAGE:$TAG
+        docker images
+        docker tag $IMAGE:$TAG "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+        docker images
+        docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+        echo 同步完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+        
