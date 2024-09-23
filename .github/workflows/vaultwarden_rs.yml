@@ -1,5 +1,5 @@
 
-name: Get vaultwarden_rs(单镜像) To Aliyun
+name: Get VaultWarden_RS(单镜像) To Aliyun
 
 on:
   schedule:
@@ -15,7 +15,7 @@ on:
     inputs:
       image:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'dockerhub上的image名字,不仅可以同步bitwarden，其他也可以'
+        description: 'dockerhub上的image名字,不仅可以同步vaultwarden，其他也可以'
         # Default value if no value is explicitly provided
         default: 'vaultwarden/server'
         # Input has to be provided for the workflow to run
@@ -50,8 +50,8 @@ jobs:
         echo 触发事件:$GITHUB_EVENT_NAME
         if [ "${{ env.IMAGE }}" == "" ];then
           echo 设置变量
-          echo "IMAGE=bitwarden/self-host" >> $GITHUB_ENV
-          echo "TAG=beta" >> $GITHUB_ENV
+          echo "IMAGE=vaultwarden/server" >> $GITHUB_ENV
+          echo "TAG=latest" >> $GITHUB_ENV
         else
           echo 已经有变量，不设置
         fi
