@@ -2,9 +2,9 @@
 name: Get Bitwarden(单镜像) To Aliyun
 
 on:
-  schedule:
+  #schedule:
   # 每天22:05运行,中国时区每天06:05运行
-  - cron: '5 22 */1 * *'
+  #- cron: '5 22 */1 * *'
 
   push:
     branches:
