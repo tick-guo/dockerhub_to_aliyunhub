@@ -20,7 +20,8 @@ fun_update(){
     #tag不变
     NEWTAG=$TAG
     echo 开始拉取
-    docker pull $IMAGE:$TAG
+    docker pull $IMAGE:$TAG  > tmp.log
+    tail -3 tmp.log
     echo 拉取结果
     docker images | grep $IMAGE
     echo 重新tag
@@ -28,21 +29,22 @@ fun_update(){
     echo tag结果
     docker images | grep $NEWIMAGE
     echo 开始push到阿里云
-    docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+    docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"   > tmp.log
+    tail -3 tmp.log
     echo push完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
 
 }
 
 
 do_main(){
-    fun_update vaultwarden/server latest
-    fun_update portainer/portainer-ce latest
-    fun_update nginx:1.27
-    fun_update jc21/nginx-proxy-manager latest
+    fun_update vaultwarden/server                   latest
+    fun_update portainer/portainer-ce              latest
+    fun_update nginx                                        1.27
+    fun_update jc21/nginx-proxy-manager       latest
     # v1.5.9 , 9个月了一直没更新了
-    fun_update productiveops/dokemon latest
+    fun_update productiveops/dokemon          latest
     # v2.4 ，  6年一直没更新了
-    fun_update bytemark/webdav latest
+    fun_update bytemark/webdav                    latest
     
 }
 
