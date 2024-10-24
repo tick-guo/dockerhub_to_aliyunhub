@@ -50,7 +50,7 @@ jobs:
         pwd
         ls -l
         #find .
-        bash -x ./update_docker_image.sh
+        bash  ./update_docker_image.sh
         
 
         
