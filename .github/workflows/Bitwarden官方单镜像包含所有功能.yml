@@ -1,30 +1,30 @@
 
-name: Get VaultWarden_RS(单镜像) To Aliyun
+name: Bitwarden官方单镜像包含所有功能
 
 on:
-  schedule:
+  #schedule:
   # 每天22:05运行,中国时区每天06:05运行
-  - cron: '5 22 */1 * *'
+  #- cron: '5 22 */1 * *'
 
-  push:
-    branches:
-    - main
+  #push:
+  #  branches:
+  #  - main
   
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
       image:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'dockerhub上的image名字,不仅可以同步vaultwarden，其他也可以'
+        description: 'dockerhub上的image名字,不仅可以同步bitwarden，其他也可以'
         # Default value if no value is explicitly provided
-        default: 'vaultwarden/server'
+        default: 'bitwarden/self-host'
         # Input has to be provided for the workflow to run
         required: true
       tag:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'dockerhub上的tag, 将同步到阿里云'
         # Default value if no value is explicitly provided
-        default: 'latest'
+        default: 'beta'
         # Input has to be provided for the workflow to run
         required: true
 
@@ -50,8 +50,8 @@ jobs:
         echo 触发事件:$GITHUB_EVENT_NAME
         if [ "${{ env.IMAGE }}" == "" ];then
           echo 设置变量
-          echo "IMAGE=vaultwarden/server" >> $GITHUB_ENV
-          echo "TAG=latest" >> $GITHUB_ENV
+          echo "IMAGE=bitwarden/self-host" >> $GITHUB_ENV
+          echo "TAG=beta" >> $GITHUB_ENV
         else
           echo 已经有变量，不设置
         fi
@@ -97,3 +97,4 @@ jobs:
         docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
         echo 同步完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
         
+

@@ -1,5 +1,5 @@
 
-name: Get Bitwarden(分镜像) To Aliyun
+name: Bitwarden官方11个独立镜像
 
 on:
   workflow_dispatch:

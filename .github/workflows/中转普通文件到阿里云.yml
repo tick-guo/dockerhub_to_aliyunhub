@@ -1,30 +1,22 @@
 
-name: Get From Google Image To Aliyun
+name: 中转普通文件到阿里云
 
 on:
-  #schedule:
-  # 每天22:05运行,中国时区每天06:05运行
-  #- cron: '5 22 */1 * *'
-
-  #push:
-    #branches:
-    #- main
-  
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
       image:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'gcr.io上的image名字'
+        description: 'http下载地址'
         # Default value if no value is explicitly provided
-        default: 'cadvisor/cadvisor-amd64'
+        default: 'https://github.com/bitwarden/clients/releases/download/desktop-v2024.7.1/Bitwarden-Portable-2024.7.1.exe'
         # Input has to be provided for the workflow to run
         required: true
       tag:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'gcr上的tag, 将同步到阿里云'
+        description: '标签一般用文件名'
         # Default value if no value is explicitly provided
-        default: 'latest'
+        default: 'Bitwarden-Portable-2024.7.1.exe'
         # Input has to be provided for the workflow to run
         required: true
 
@@ -45,17 +37,7 @@ jobs:
     environment: push_to_aliyun
     
     steps:  
-    - name: 如果没有输入参数，则设置默认值
-      run: |
-        echo 触发事件:$GITHUB_EVENT_NAME
-        if [ "${{ env.IMAGE }}" == "" ];then
-          echo 设置变量
-          echo "IMAGE=cadvisor/cadvisor-amd64" >> $GITHUB_ENV
-          echo "TAG=v0.49.1" >> $GITHUB_ENV
-        else
-          echo 已经有变量，不设置
-        fi
-   
+    
     # 1 Login to ACR
     - name: Login to ACR with the AccessKey pair
       uses: aliyun/acr-login@v1.0.6
@@ -67,9 +49,8 @@ jobs:
         #username: "${{ secrets.USERNAME }}"
         #password: "${{ secrets.PASSWORD }}"
         
-        
     # 2 Build and push image to ACR
-    - name: 拉取docker镜像并推送到阿里云
+    - name: Build and push image to ACR
       run: |
         echo curdir=$(pwd)
         echo sysinfo=$(uname -a)
@@ -77,23 +58,14 @@ jobs:
         echo IMAGE=${{ env.IMAGE }}
         echo TAG=${{ env.TAG }}
 
-        docker version
+        mkdir work;cd work
+        echo "FROM busybox:latest" > Dockerfile
+        echo "RUN mkdir /app" >> Dockerfile
+        echo "RUN cd /app && wget $IMAGE " >> Dockerfile
+        #
+        docker build -t $REGISTRY/$NAMESPACE/busybox:$TAG .
+        docker push $REGISTRY/$NAMESPACE/busybox:$TAG
         
-        echo 把IMAGE中的斜线/替换为短横线-
-        NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
-        echo tag不变
-        NEWTAG=$TAG
-
-        echo NEWIMAGE=$NEWIMAGE
-        echo NEWTAG=$NEWTAG
         
-        #exit 0
-        #docker login -u "$USERNAME" -p "$PASSWORD"  "$REGISTRY"
-        
-        docker pull gcr.io/$IMAGE:$TAG
-        docker images
-        docker tag gcr.io/$IMAGE:$TAG "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
-        docker images
-        docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
-        echo 同步完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+      
         
