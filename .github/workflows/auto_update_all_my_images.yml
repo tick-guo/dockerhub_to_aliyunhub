@@ -1,0 +1,54 @@
+name: auto_update_all_my_images
+
+on:
+  schedule:
+  # 每天22:05运行,中国时区每天06:05运行
+  - cron: '5 22 */1 * *'
+
+  push:
+    branches:
+    - main
+  
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+
+# Environment variables available to all jobs and steps in this workflow.
+env:
+  REGION_ID: cn-chengdu
+  REGISTRY: registry.cn-chengdu.aliyuncs.com
+  
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: push_to_aliyun
+    
+    steps:  
+    - name: 如果没有输入参数，则设置默认值
+      run: |
+        echo 触发事件:$GITHUB_EVENT_NAME
+  
+    # 1 Login to ACR
+    - name: Login to ACR with the AccessKey pair
+      uses: aliyun/acr-login@v1.0.6
+      with:
+        region-id: "${{ env.REGION_ID }}"
+        access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+        access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+    
+    - name: Checkout
+      uses: actions/checkout@v4.2.2
+      with:
+        # Repository name with owner. For example, actions/checkout
+        repository: ${{ github.repository }}
+
+    # 2 Build and push image to ACR
+    - name: 拉取docker镜像并推送到阿里云
+      run: |
+        pwd
+        find .
+        
+
+        
