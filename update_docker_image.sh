@@ -1,14 +1,15 @@
 #!/bin/bash
 
 #set -x
-
+echo 设置阿里服务器地址
 REGISTRY="registry.cn-chengdu.aliyuncs.com"
 NAMESPACE="tickg"
 
-echo curdir=$(pwd)
-echo sysinfo=$(uname -a)
-echo whoami=$(whoami)
-docker version
+echo 当前目录 $(pwd)
+echo 系统信息 $(uname -a)
+echo 用户信息 $(whoami)
+echo docker版本
+docker version | grep -i version
 
 fun_update(){
     echo "------------------分割线-------------------"
@@ -30,7 +31,7 @@ fun_update(){
     docker images | grep $NEWIMAGE
     echo 开始push到阿里云
     docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"   > tmp.log
-    tail -3 tmp.log
+    tail -2 tmp.log
     echo push完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
 
 }
