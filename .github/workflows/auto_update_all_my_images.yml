@@ -26,12 +26,12 @@ jobs:
     environment: push_to_aliyun
     
     steps:  
-    - name: 如果没有输入参数，则设置默认值
+    - name: 检测触发事件
       run: |
         echo 触发事件:$GITHUB_EVENT_NAME
   
     # 1 Login to ACR
-    - name: Login to ACR with the AccessKey pair
+    - name: 登录到阿里云镜像仓库
       uses: aliyun/acr-login@v1.0.6
       with:
         region-id: "${{ env.REGION_ID }}"
@@ -48,7 +48,9 @@ jobs:
     - name: 拉取docker镜像并推送到阿里云
       run: |
         pwd
-        find .
+        ls -l
+        #find .
+        bash -x ./update_docker_image.sh
         
 
         
