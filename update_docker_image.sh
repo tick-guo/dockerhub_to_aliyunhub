@@ -11,19 +11,25 @@ echo whoami=$(whoami)
 docker version
 
 fun_update(){
+    echo "------------------分割线-------------------"
     IMAGE=$1
     TAG=$2
-    echo $IMAGE:$TAG
+    echo 开始处理：$IMAGE:$TAG
     #把IMAGE中的斜线/替换为短横线-
     NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
     #tag不变
     NEWTAG=$TAG
+    echo 开始拉取
     docker pull $IMAGE:$TAG
+    echo 拉取结果
     docker images | grep $IMAGE
+    echo 重新tag
     docker tag $IMAGE:$TAG "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+    echo tag结果
     docker images | grep $NEWIMAGE
+    echo 开始push到阿里云
     docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
-    echo 同步完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+    echo push完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
 
 }
 
