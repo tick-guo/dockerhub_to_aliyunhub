@@ -48,6 +48,7 @@ do_main(){
     fun_update bytemark/webdav                    latest
     #
     fun_update zerotier/zerotier                  latest
+    fun_update zerotier/zerotier                  1.14.0
     
 }
 
