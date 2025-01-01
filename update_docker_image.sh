@@ -46,6 +46,8 @@ do_main(){
     fun_update productiveops/dokemon          latest
     # v2.4 ，  6年一直没更新了
     fun_update bytemark/webdav                    latest
+    #
+    fun_update zerotier/zerotier                  latest
     
 }
 
