@@ -38,17 +38,22 @@ fun_update(){
 
 
 do_main(){
-    fun_update vaultwarden/server                   latest
-    fun_update portainer/portainer-ce              latest
-    fun_update nginx                                        1.27
-    fun_update jc21/nginx-proxy-manager       latest
+    fun_update vaultwarden/server                 latest
+    fun_update portainer/portainer-ce             latest
+    fun_update nginx                              1.27
+    fun_update nginx                              latest
+    fun_update jc21/nginx-proxy-manager           latest
     # v1.5.9 , 9个月了一直没更新了
-    fun_update productiveops/dokemon          latest
+    fun_update productiveops/dokemon              latest
     # v2.4 ，  6年一直没更新了
     fun_update bytemark/webdav                    latest
     #
     fun_update zerotier/zerotier                  latest
     fun_update zerotier/zerotier                  1.14.0
+    #
+    fun_update louislam/dockge                    1
+    fun_update louislam/dockge                    latest
+    #
     
 }
 
