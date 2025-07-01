@@ -1,4 +1,4 @@
-name: [默认]auto_update_all_my_images
+name: "[默认]auto_update_all_my_images"
 
 on:
   schedule:
