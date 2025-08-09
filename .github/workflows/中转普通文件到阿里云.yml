@@ -20,6 +20,10 @@ on:
         # Input has to be provided for the workflow to run
         required: true
 
+  push:
+    branches:
+      - main
+
 # Environment variables available to all jobs and steps in this workflow.
 env:
   REGION_ID: cn-chengdu
@@ -57,6 +61,11 @@ jobs:
         echo whoami=$(whoami)
         echo IMAGE=${{ env.IMAGE }}
         echo TAG=${{ env.TAG }}
+        
+        if [[ "$IMAGE" == "" ]];then
+          IMAGE="https://s1.5playdisk.com/9c97a5093cc3a9730c826180226b6582:2025080918/files/braid-anniversary-edition-2.5.5-mod-t-5play.apk"
+          TAG="braid-anniversary-edition-2.5.5-mod-t-5play.apk"
+        fi 
 
         mkdir work;cd work
         echo "FROM busybox:latest" > Dockerfile
