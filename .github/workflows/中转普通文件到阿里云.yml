@@ -65,7 +65,7 @@ jobs:
         if [[ "$IMAGE" == "" ]];then
           IMAGE="https://s1.5playdisk.com/9c97a5093cc3a9730c826180226b6582:2025080918/files/braid-anniversary-edition-2.5.5-mod-t-5play.apk"
           TAG="braid-anniversary-edition-2.5.5-mod-t-5play.apk"
-          #echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> $GITHUB_ENV
         fi 
 
         mkdir work;cd work
