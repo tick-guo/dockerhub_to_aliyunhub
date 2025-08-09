@@ -32,8 +32,11 @@ fun_update(){
     NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
     #tag不变
     NEWTAG=$TAG
-    
+
     echo "check digest same or not"
+    skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG
+    echo "-----------"
+    skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG
     org_digest=$(skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG | jq -r '.Digest')
     ali_digest=$(skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG | jq -r '.Digest')
     echo "org_digest=$org_digest"
