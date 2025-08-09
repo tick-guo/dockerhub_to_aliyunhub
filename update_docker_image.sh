@@ -34,11 +34,20 @@ fun_update(){
     NEWTAG=$TAG
 
     echo "check digest same or not"
-    skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG
+    #skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG
+    #echo "-----------"
+    #skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG
+    # 这个方法获取的id不相同
+    #org_digest=$(skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG | jq -r '.Digest')
+    #ali_digest=$(skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG | jq -r '.Digest')
+
+    skopeo inspect --tls-verify=false  --raw docker://docker.io/$IMAGE:$TAG
     echo "-----------"
-    skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG
-    org_digest=$(skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG | jq -r '.Digest')
-    ali_digest=$(skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG | jq -r '.Digest')
+    skopeo inspect --tls-verify=false  --raw docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG
+    org_digest=$(skopeo inspect --tls-verify=false  --raw docker://docker.io/$IMAGE:$TAG | jq -r '.config.digest')
+    ali_digest=$(skopeo inspect --tls-verify=false  --raw docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG | jq -r '.config.digest')
+
+
     echo "org_digest=$org_digest"
     echo "ali_digest=$ali_digest"
     if [[ "$org_digest" != "" && "$org_digest" != "$ali_digest" ]];then
