@@ -90,6 +90,7 @@ jobs:
       #
     - name: Push image to ACR
       run: |
+        echo "TAG=$TAG"
         if [ "$TAG" == "" ];then
           echo tag is null
           exit 1
