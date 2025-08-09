@@ -20,9 +20,9 @@ on:
         # Input has to be provided for the workflow to run
         required: true
 
-  push:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
 
 # Environment variables available to all jobs and steps in this workflow.
 env:
