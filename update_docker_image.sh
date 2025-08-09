@@ -27,19 +27,17 @@ fun_update(){
     echo "------------------分割线-------------------"
     IMAGE=$1
     TAG=$2
-    echo 开始处理：$IMAGE:$TAG
+    echo "开始处理：$IMAGE:$TAG"
     #把IMAGE中的斜线/替换为短横线-
     NEWIMAGE=$(echo $IMAGE | sed s#/#-# )
     #tag不变
     NEWTAG=$TAG
+    
     echo "check digest same or not"
-    docker.io/zerotier/zerotier:1.14.0
-    registry.cn-chengdu.aliyuncs.com/tickg/zerotier-zerotier
-
     org_digest=$(skopeo inspect --tls-verify=false docker://docker.io/$IMAGE:$TAG | jq -r '.Digest')
     ali_digest=$(skopeo inspect --tls-verify=false docker://$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG | jq -r '.Digest')
-    echo org_digest=$org_digest
-    echo ali_digest=$ali_digest
+    echo "org_digest=$org_digest"
+    echo "ali_digest=$ali_digest"
     if [[ "$org_digest" != "" && "$org_digest" != "$ali_digest" ]];then
         echo "need update"
     else
@@ -47,19 +45,19 @@ fun_update(){
         return
     fi
 
-    echo 开始拉取
+    echo "开始拉取"
     docker pull $IMAGE:$TAG  > tmp.log
     tail -3 tmp.log
-    echo 拉取结果
+    echo "拉取结果"
     docker images | grep $IMAGE
-    echo 重新tag
+    echo "重新tag"
     docker tag $IMAGE:$TAG "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
-    echo tag结果
+    echo "tag结果"
     docker images | grep $NEWIMAGE
-    echo 开始push到阿里云
+    echo "开始push到阿里云"
     docker push "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"   > tmp.log
     tail -2 tmp.log
-    echo push完成： "$REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
+    echo "push完成： $REGISTRY/$NAMESPACE/$NEWIMAGE:$NEWTAG"
 
 }
 
@@ -84,9 +82,7 @@ do_main(){
     #fun_update louislam/dockge                    1
     #fun_update louislam/dockge                    latest
     #
-    
-
-}# 
+}
 
 do_main
 
