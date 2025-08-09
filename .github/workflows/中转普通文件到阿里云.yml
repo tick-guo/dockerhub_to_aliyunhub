@@ -53,8 +53,8 @@ jobs:
         #username: "${{ secrets.USERNAME }}"
         #password: "${{ secrets.PASSWORD }}"
         
-    # 2 Build and push image to ACR
-    - name: Build and push image to ACR
+    # 2 Build
+    - name: Build image
       run: |
         echo curdir=$(pwd)
         echo sysinfo=$(uname -a)
@@ -73,6 +73,22 @@ jobs:
         echo "RUN cd /app && wget $IMAGE " >> Dockerfile
         #
         docker build -t $REGISTRY/$NAMESPACE/busybox:$TAG .
+
+      #  1h登录会失效，重新登录
+    - name: Login again
+      uses: aliyun/acr-login@v1.0.6
+      with:
+        region-id: "${{ env.REGION_ID }}"
+        access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+        access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+          #login-server: "${{ env.REGISTRY }}"
+          #username: "${{ secrets.USERNAME }}"
+          #password: "${{ secrets.PASSWORD }}"
+
+      #
+    - name: Push image to ACR
+      run: |
+        
         docker push $REGISTRY/$NAMESPACE/busybox:$TAG
         
         
