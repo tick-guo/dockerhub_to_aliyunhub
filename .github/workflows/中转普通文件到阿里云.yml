@@ -74,6 +74,7 @@ jobs:
         #echo "RUN cd /app && wget $IMAGE " >> Dockerfile
         #
         docker build -t $REGISTRY/$NAMESPACE/busybox:$TAG .
+        docker images 
 
       #  1h登录会失效，重新登录
     - name: Login again
