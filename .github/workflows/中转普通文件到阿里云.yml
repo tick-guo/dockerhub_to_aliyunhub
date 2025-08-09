@@ -22,7 +22,7 @@ on:
 
   push:
     branches:
-      - main
+      - main-xx
 
 # Environment variables available to all jobs and steps in this workflow.
 env:
@@ -62,16 +62,16 @@ jobs:
         echo IMAGE=${{ env.IMAGE }}
         echo TAG=${{ env.TAG }}
         
-        if [[ "$IMAGE" == "" ]];then
-          IMAGE="https://s1.5playdisk.com/9c97a5093cc3a9730c826180226b6582:2025080918/files/braid-anniversary-edition-2.5.5-mod-t-5play.apk"
-          TAG="braid-anniversary-edition-2.5.5-mod-t-5play.apk"
-          echo "TAG=$TAG" >> $GITHUB_ENV
-        fi 
+        #if [[ "$IMAGE" == "" ]];then
+        #  IMAGE="https://s1.5playdisk.com/9c97a5093cc3a9730c826180226b6582:2025080918/files/braid-anniversary-edition-2.5.5-mod-t-5play.apk"
+        #  TAG="braid-anniversary-edition-2.5.5-mod-t-5play.apk"
+        #  echo "TAG=$TAG" >> $GITHUB_ENV
+        #fi 
 
         mkdir work;cd work
         echo "FROM busybox:latest" > Dockerfile
         echo "RUN mkdir /app" >> Dockerfile
-        #echo "RUN cd /app && wget $IMAGE " >> Dockerfile
+        echo "RUN cd /app && wget $IMAGE " >> Dockerfile
         #
         docker build -t $REGISTRY/$NAMESPACE/busybox:$TAG .
         docker images 
@@ -91,6 +91,7 @@ jobs:
     - name: Push image to ACR
       run: |
         echo "TAG=$TAG"
+        docker images 
         if [ "$TAG" == "" ];then
           echo tag is null
           exit 1
