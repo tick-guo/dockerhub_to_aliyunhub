@@ -79,6 +79,7 @@ do_main(){
     #
     fun_update zerotier/zerotier                  latest
     fun_update zerotier/zerotier                  1.14.0
+    fun_update  mysql                                  5.7
     #
     #fun_update louislam/dockge                    1
     #fun_update louislam/dockge                    latest
