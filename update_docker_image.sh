@@ -85,7 +85,11 @@ do_main(){
     #
     #fun_update louislam/dockge                    1
     #fun_update louislam/dockge                    latest
-    #
+    #ceph 14 = ceph-nautilus
+	fun_update ceph/daemon                       ceph-nautilus
+	
+	
+	
 }
 
 do_main
